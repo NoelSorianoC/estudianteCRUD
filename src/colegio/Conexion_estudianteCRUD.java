@@ -54,7 +54,37 @@ public class Conexion_estudianteCRUD
         System.out.println(e.getMessage());
     }
 
+}
+
+ public void actualizarEliminarRegistro(string tabla, string valoresCamposNuevos, string condicion) {
+     
+      Conexion_estudianteCRUD conectar = new conexion_estudianteCRUD ();
+Connection cone = conectar.getConnection ();
+      try {
+        statement stmt;
+        string sqlQueryStmt;
+        if(valoresCamposNuevos.isEmpty()) {
+             sqlQueryStmt = "DELETE FROM" + tabla + "WHERE" + condición + ";" ;
+         }
+         else{
+             sqlQueryStmt = "UPDATE" + tabla + "SET" + valoresCaposNuevos + "WHERE" + condición + ";" ;
+  }
+   stmt = cone.createstatement ();
+   stmt.executeUpdate (sqlQueryStmt);
+   stmt.close ();
+   cone.close ();
+}catch (SQLException ex)  {
+      System.out.printin ( " Ha ocurrido el siguiente error:" + ex.getMessage () );
+ }
+
+}
+
+
+ 
+  
+
     
 
     
+
 

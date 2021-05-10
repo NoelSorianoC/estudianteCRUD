@@ -51,33 +51,85 @@ public class Conexion_estudianteCRUD
   
     }catch (Exception e){
     
-        System.out.println(e.getMessage());
+        System.out.println(e.getMessage());{
+    }
+    }
     }
 
-}
-
- public void actualizarEliminarRegistro(string tabla, string valoresCamposNuevos, string condicion) {
+ public void actualizarEliminarRegistro(String tabla, String valoresCamposNuevos, String condicion) {
      
-      Conexion_estudianteCRUD conectar = new conexion_estudianteCRUD ();
+      Conexion_estudianteCRUD conectar = new Conexion_estudianteCRUD();
 Connection cone = conectar.getConnection ();
       try {
-        statement stmt;
-        string sqlQueryStmt;
+        Statement stmt;
+        String sqlQueryStmt;
         if(valoresCamposNuevos.isEmpty()) {
-             sqlQueryStmt = "DELETE FROM" + tabla + "WHERE" + condición + ";" ;
+             sqlQueryStmt = "DELETE FROM" + tabla + "WHERE" + condicion + ";" ;
          }
          else{
-             sqlQueryStmt = "UPDATE" + tabla + "SET" + valoresCaposNuevos + "WHERE" + condición + ";" ;
+             sqlQueryStmt = "UPDATE" + tabla + "SET" + valoresCamposNuevos + "WHERE" + condicion + ";" ;
   }
-   stmt = cone.createstatement ();
+   stmt = cone.createStatement();
    stmt.executeUpdate (sqlQueryStmt);
    stmt.close ();
    cone.close ();
 }catch (SQLException ex)  {
-      System.out.printin ( " Ha ocurrido el siguiente error:" + ex.getMessage () );
+          System.out.println( " Ha ocurrido el siguiente error:" + ex.getMessage () );
  }
 
 }
+ 
+public void  desplegarRegistros (String tablaBuscar, String camposBuscar, String condicionBuscar) throws SQLException{
+       //Cargar la conexión
+       Conexion_estudianteCRUD conectar = new Conexion_estudianteCRUD();
+       Connection cone =conectar.getConnection ();
+        try{
+               Statement stmt;
+               String sqlQueryStmt;
+               if (condicionBuscar.equals ("") ) {
+                      sqlQueryStmt = "SELECT" + camposBuscar + "FROM " + tablaBuscar + ";";
+              }else{
+              sqlQueryStmt= "SELECT " + camposBuscar + "FROM " + tablaBuscar + "WHERE" + condicionBuscar;
+}
+stmt = cone.createStatement () ;
+stmt.executeQuery (sqlQueryStmt);
+// Le indicamos que ejecute la consulta de la tabla y le pasamos por argumentos nuestra sentencia
+try (ResultSet miResultSet = stmt.executeQuery (sqlQueryStmt)) {
+       if    (miResultSet.next () ) { // Ubica el cursor en la primera fila de la tabla de resultado
+             ResultSetMetaData metaData = miResultSet.getMetaData ();
+              int numColumnas = metaData.getColumnCount (); //Obtiene el número de columnas de la consulta
+             System.out.println("<<REGISTROS ALMACENADOS>>");
+             System.out.println("");
+                 for (int i = 1; i <= numColumnas; i++) {
+                       //Muestra los títulos de las columnas y %-20s\t indica la separación entre columnas
+                      System.out.println("%-20s\t"+ metaData.getColumnName(i));
+                  }
+
+           System.out.println("");
+do  {
+         for  (int i = 1; i <= numColumnas; i++)  {
+               System.out.println("%-20s\t" + miResultSet.getObject(i));
+        }
+        System.out.println("");
+ }   while  (miResultSet.next ()) ;
+           System.out.println("");
+} else {
+           System.out.println("No se han encontrado registros");
+}
+miResultSet.close () ; //Cerrar el ResutSet
+}finally{
+      // Cerrar el Statement y la Conexión; se cierran en orden inverso de como           se han abierto
+      stmt.close ();
+      cone.close ();
+}
+}catch (SQLException ex ) {
+            System.out.println("Ha ocurrido el siguiente error: " + ex.getMessage ());
+        }
+    }
+}
+
+     
+
 
 
  
